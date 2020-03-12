@@ -27,4 +27,4 @@ ok 就写这么多啦，不过好像内容很单调的亚子。
 
 那就放一张我的桌面壁纸叭
 
-![](/images/73cae1e468e5499db2d1fcde936461d9_th.jpg)
+![](./images/73cae1e468e5499db2d1fcde936461d9_th.jpg)
