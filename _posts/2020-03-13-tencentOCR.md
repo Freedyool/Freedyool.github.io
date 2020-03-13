@@ -2,9 +2,9 @@
 
 效果演示：
 
-![一张来自百度文库的截图|left|](/images/2020_03_13/批注 2020-03-12 105106.jpg)
+![](/images/2020_03_13/批注 2020-03-12 105106.jpg"一张来自百度文库的截图")
 
-![识别后生成的txt文本|right|](/images/2020_03_13/2020-03-13 125743.jpg)
+!["识别后生成的txt文本"](/images/2020_03_13/2020-03-13 125743.jpg)
 
 应用场景：百度文库 PDF扫描件 的文字复制
 
@@ -14,7 +14,7 @@
 
 ## Step 1：开通腾讯云文字识别服务
 
-打开腾讯云官网(https://cloud.tencent.com) 
+打开腾讯云官网[](https://cloud.tencent.com) 
 
 使用QQ或者微信登录 然后按照提示完成个人实名认证（仅需两步 十分简单）
 
@@ -40,7 +40,7 @@ pip3 install tencentcloud-sdk-python
 
 ## Step 3：获取API访问密钥
 
-打开 https://console.cloud.tencent.com/cam/capi
+打开 腾讯云控制台[](https://console.cloud.tencent.com/cam/capi)
 
 ![](/images/2020_03_13/2020-03-13 105851.jpg)
 
@@ -48,9 +48,9 @@ pip3 install tencentcloud-sdk-python
 
 ## Step 4：生成接口代码
 
-使用官方工具生成接口代码（https://console.cloud.tencent.com/api/explorer?Product=ocr&Version=2018-11-19&Action=GeneralBasicOCR）
+使用官方工具生成接口代码 [](https://console.cloud.tencent.com/api/explorer?Product=ocr&Version=2018-11-19&Action=GeneralBasicOCR）
 
-如果上述链接失效 请打开 https://cloud.tencent.com/document/product/866/33526
+如果上述链接失效 请打开 [](https://cloud.tencent.com/document/product/866/33526)
 
 找到
 
@@ -78,7 +78,7 @@ pip3 install tencentcloud-sdk-python
 
 那么我就需要获得我本地图片的base64编码 实现起来呢也是非常简单
 
-```
+```python
 import base64
 
 f = open(file_path,'rb')
@@ -101,7 +101,7 @@ f.close
 
 因此我们不妨直接执行赋值操作 将上图的三行代码改成：
 
-```
+```python
 req = models.GeneralBasicOCRRequest()
 req.ImageBase64 = ls_f //ls_f即为encode后的字符串编码
 ```
@@ -113,7 +113,7 @@ req.ImageBase64 = ls_f //ls_f即为encode后的字符串编码
 为了方便我们查看识别出来的效果 我们将结果保存到本地的一个txt文本中去
 需要在代码最后加上
 
-```
+```python
 with open('./for_test.txt','w',encoding='utf-8') as f:
     f.write(resp.to_json_string(indent=2))  //indent参数默认为None 此时输出的结果是紧凑保存 效果如之前截图所示
                           //将indent置为2后 可以得到可读性更高的自动缩进版本（你也可以设置其它数值 来修改缩进量）
@@ -129,7 +129,7 @@ ok 他看上去能给人看了 不过里面的多余信息属实鸡肋（其实�
 
 总而言之 我们可以通过关键字索引 来获取我们需要的信息
 
-```
+```python
 import json
 print(json.loads(Json字符串)["关键字1"]["关键字2"]...)
 ```
@@ -154,7 +154,7 @@ print(json.loads(Json字符串)["关键字1"]["关键字2"]...)
 
 可以看到 我们需要的的文本信息被分割成了很多段 因此 我们需要借助一个循环体来把我们需要的信息连接起来
 
-```
+```python
 TextDetections = json.loads(resp)["TextDetections"]
 DetectedText = ""
 for i in range(len(TextDetections)):
@@ -163,7 +163,7 @@ for i in range(len(TextDetections)):
 
 最终呢 我们的完整代码就变成了这样：
 
-```
+```python
 from tencentcloud.common import credential
 from tencentcloud.common.profile.client_profile import ClientProfile
 from tencentcloud.common.profile.http_profile import HttpProfile
