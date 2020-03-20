@@ -15,10 +15,11 @@
 ok！ 
 
 ### Round 1 python 3.7 + matplotlib 3.2.1
-s
+
 按照惯例 先上结果图
 
 ![]{/images/2020_03_19/Figure_1.png}
+
 ![]{/images/2020_03_19/Figure_2.png}
 
 因为这里不能调取可视化工具 所以看不了它实际的3D旋转和放缩的效果 实际上它是可以旋转放缩滴(你问我这张图有啥用 emm 没什么用 可能可以用于进一步理解python的matplotlib吧 手动狗头)
