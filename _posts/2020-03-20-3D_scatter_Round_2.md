@@ -62,10 +62,81 @@ matrix %>%
   )
 ```
 
-通过代码的缩进 不难看出 这段代码分为两块
+代码分为数据准备部分和绘图部分 这也是我们脑中需要清楚的 即我们要用什么样的数据传入绘图函数 以及绘图函数的调用方法
 
-前16行代码是第一块代码 这一块儿完成了数据的预处理 后面的代码是绘图函数
+数据准备部分使用的是R语言常用的dataframe数据框以及针对数据框的函数包[`dplyr`](https://www.rdocumentation.org/packages/dplyr/versions/0.7.8)
 
-先看数据的预处理部分 前9行没什么可说的 构造了一个数据框(R语言的一种数据格式 类似于excel表格数据)
+dataframe部分将多个向量拼接成一个名为matrix的数据框 列名包括`x`,`y`,`z`,`color`,`size`五个部分 每一行作为一个空间点的完整信息参数
 
-而在10-16行这里 是有关数据分类汇总的一段代码 当初也是迷惑了yool很久才看弄明白
+绘图部分使用了`echarts4r`和`dplyr`中的管道函数`%>%`(一个非常实用的工具) 解读一下绘图模块 
+
+`e_charts(x)`:初始化画布
+
+`e_scatter_3d(y, z, size, color)`:绘图函数
+
+`e_visual_map`:左侧可视化选择工具(可根据点的颜色和大小部分显示)
+
+接下来是一个我的示例 数据集可以在我的gihub项目仓库里找到
+
+```R
+library(echarts4r)
+# 预定义部分
+{
+  colormap = c('#0000f6','#01a0f6','#00ecec','#01ff00',
+               '#00c800','#019000','#ffff00','#e7c000',
+               '#ff9000','#ff0000','#d60000','#c00000',
+               '#ff00f0','#780084','#ad90f0')
+  center_lat = 38.35
+  center_lon = 114.72
+}
+# 数据载入
+tmp = read.csv("./8-12-120906.csv", header = TRUE,stringsAsFactors = FALSE)
+# 数据集制作
+{
+  data <- data.frame(lon= numeric(), lat= numeric(),height= numeric(), dbz=numeric(),color=numeric(),stringsAsFactors=FALSE)
+
+  dat = subset(tmp, dbz!='--')
+  rm(tmp)
+  dat$dbz = as.numeric(dat$dbz)
+  dat = subset(dat, dbz>0)
+  # 分级设置点的颜色
+  temp = subset(dat, dbz > 70)
+  temp$color = rep(15,times=length(temp$dbz))
+  data = rbind.data.frame(data,temp)
+  for(i in c(1:14)){
+    temp = subset(dat, dbz > (5*i-5) & dbz <= (5*i))
+    temp$color = rep(i,times=length(temp$dbz))
+    data = rbind.data.frame(data,temp)
+  }
+  rm(dat)
+  rm(temp)
+ }
+ # 数据集整合
+  data <- data.frame(
+    x = data$lon-center_lon,
+    y = data$lat-center_lat,
+    z = data$height,
+    size = data$height,
+    color = data$color,
+    stringsAsFactors=FALSE
+  )
+ # 绘制图像
+ data %>%
+    e_charts(x) %>%
+    e_scatter_3d(y, z, size, color) %>%
+    e_visual_map(
+      min = 0.15, max = 16,
+      inRange = list(symbolSize = c(3, 5)),
+      dimension = 2
+    ) %>%
+    e_visual_map(
+      min = 1, max = 15,
+      inRange = list(color = colormap), 
+      dimension = 4,
+      bottom = 300
+    )
+```
+
+OK 关于如何用echarts4r绘制巨量三维散点图就说到这里了 有一些不得不说的东西 就是没有什么语言或者包是完美的 总会有不足 相比于matplotlib 基于百度echarts的echarts4r显然在性能和视觉效果上提高了一个层次 但是也有图层穿模 无法支持同时渲染更大批量数据 以及视角交互能力有较多局限性这样的问题 此外添加地图插件似乎也会遇到一些问题 本人也尚未解决
+
+有机会的话 我会讲讲如何在python环境下实现echarts的调用 希望能解决上述提及的部分问题 不过大概率不会有很大的改进 毕竟都是基于echarts的包 所以我也是比较期待是否有更多功能更为强悍的可视化工具 欢迎评论区告知我
