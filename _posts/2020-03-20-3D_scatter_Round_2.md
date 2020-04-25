@@ -1,18 +1,15 @@
-# Echarts大法好(滑稽)
-
+# Echarts->R
 在yool将他的需求告诉他的小伙伴的时候 他的小伙伴告诉他 不妨试一试用前端的js包来画出想要的图 而且前端的美化功力也是值得肯定的
 
-这里就不得不安利一下由百度前端团队开发的[Echarts](https://www.echartsjs.com/zh/index.html)项目了
+经过另一位小伙伴的推荐 我找到了这个[Echarts](https://www.echartsjs.com/zh/index.html)
 
-此处省略亿点赞美之词
+这是百度团队开发的一款js可视化工具包 功能强悍 科技感十足(疯狂安利一波)
 
-ok 下面正式进入我们的Round2 本文将不再给出完整代码 而是针对其核心代码进行详细说明 以及一些适用场景的介绍
+## Round 2 R+Echarts绘图解决方案
 
-## Round 2 和Echarts相关的绘图解决方案
+百度Echarts是个前端js包 我曾经试想过写一个前端调用 然后用json传个数据包过去渲染一下
 
-很明显 Echarts是个前端js包 这对我这种毫无前端开发经验 只会写个html的yool来说 有点超纲
-
-花了小半天的时间 只是得到了一个模糊的逻辑概念 而没有得出一个具体可实现的做法
+结果花了小半天的时间 只是得到了一个模糊的逻辑概念 而没有得出一个具体可实现的做法 一天速成前端计划告破
 
 接着我注意到了一个名为[Recharts](https://madlogos.github.io/recharts/index_cn.html#-en)的项目 这个项目是百度Echarts2的一个R语言接口 不过它的版本十分陈旧 无法满足我需要的功能 在这个项目的文档里 我发现了recharts2的开发情况 点击它给我的链接 发现了一个悲伤的故事
 
